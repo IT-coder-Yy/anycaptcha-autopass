@@ -1,0 +1,42 @@
+[
+  {
+    "name": "text-detector.onnx",
+    "url": "https://raw.githubusercontent.com/MgArcher/Text_select_captcha/dcd1ac317c73cd29a7e3118f935c2b3fbd34cb02/model/best_v3.onnx",
+    "bytes": 9806720,
+    "git_blob_sha1": "dbd5f937672c077c649bf987171c183898dc2dd5",
+    "sha256": "a9804980ad250f236104c2befac980321de29799410847c52f5b855ac9de347d",
+    "license_note": "上游未声明，评测候选"
+  },
+  {
+    "name": "text-matcher.onnx",
+    "url": "https://raw.githubusercontent.com/MgArcher/Text_select_captcha/dcd1ac317c73cd29a7e3118f935c2b3fbd34cb02/model/pre_model_v7.onnx",
+    "bytes": 44452568,
+    "git_blob_sha1": "5b5a820c5a63a91a230cbcf3f256822675fa4af6",
+    "sha256": "885e01b20592c558df7c7438177e39623f218d02154631cbdc17e654fcac3e05",
+    "license_note": "上游未声明，评测候选"
+  },
+  {
+    "name": "rotate.onnx",
+    "url": "https://raw.githubusercontent.com/Hiram-Wong/captcha-bypass/80a61e09bc88145d49bdc148f8ef55865dc25768/models/rotate.onnx",
+    "bytes": 72412486,
+    "git_blob_sha1": "ffa351fb21237a16ab2835626e5390c1d4d7488c",
+    "sha256": "193c19d7c130f7f5a9566123d35c1db37b9e22b61c22b9ae9f6625f15f6543ae",
+    "license_note": "仓库代码 MIT，模型来源条件待核实"
+  },
+  {
+    "name": "ppocr-v5-mobile.onnx",
+    "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv5/rec/ch_PP-OCRv5_rec_mobile.onnx",
+    "sha256": "5825fc7ebf84ae7a412be049820b4d86d77620f204a041697b0494669b1742c5",
+    "registry_commit": "8ac45f4e731f50c37a1f5f9cf89294e08c1b2c15",
+    "bytes": 16631306,
+    "license_note": "Apache-2.0；PaddleOCR 权重，RapidOCR 转换封装"
+  },
+  {
+    "name": "ppocr-v6-small.onnx",
+    "url": "https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.10.0/onnx/PP-OCRv6/rec/PP-OCRv6_rec_small.onnx",
+    "sha256": "6f327246b50388f3c176ae304bd95767ea6dc0c9ae92153ef8cbe210b3c14884",
+    "registry_commit": "8ac45f4e731f50c37a1f5f9cf89294e08c1b2c15",
+    "bytes": 21234383,
+    "license_note": "Apache-2.0；PaddleOCR 权重，RapidOCR 转换封装"
+  }
+]
