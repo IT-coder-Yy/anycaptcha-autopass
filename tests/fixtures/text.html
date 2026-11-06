@@ -1,0 +1,36 @@
+<!doctype html><meta charset="utf-8">
+<style>
+body { margin: 0; }
+#vc_captcha_box { padding: 10px; width: 380px; transform-origin: top left; }
+.vc-captcha-verify-img-select { position: relative; width: 340px; height: 212px; }
+#captcha_click_image { width: 340px; height: 212px; }
+.vc-captcha-verify-bar-img { width: 100px; height: 30px; }
+.vc-captcha-verify-img-point { position: absolute; width: 5px; height: 5px; background: blue; pointer-events: none; }
+.vc-captcha-verify-pb { width: 80px; height: 30px; background: blue; color: white; }
+</style>
+<div id="vc_captcha_box">
+  <div>依次点击文字<img class="vc-captcha-verify-bar-img"></div>
+  <div class="vc-captcha-verify-img-select"><img id="captcha_click_image"></div>
+  <div class="vc-captcha-verify-pb disable">确定</div>
+</div>
+<script>
+const bg = document.querySelector('#captcha_click_image');
+const hint = document.querySelector('.vc-captcha-verify-bar-img');
+const submit = document.querySelector('.vc-captcha-verify-pb');
+function picture(width, height, color) {
+  const c = document.createElement('canvas'); c.width = width; c.height = height;
+  const ctx = c.getContext('2d'); ctx.fillStyle = color; ctx.fillRect(0, 0, width, height);
+  return c.toDataURL();
+}
+bg.src = picture(340, 212, 'silver'); hint.src = picture(100, 30, 'white');
+window.clicks = []; window.submitted = false;
+bg.onclick = e => {
+  clicks.push([e.clientX, e.clientY]);
+  if (window.replaceAfterClick) bg.src = picture(340, 212, 'red');
+  if (window.rejectClick) return;
+  const marker = document.createElement('span'); marker.className = 'vc-captcha-verify-img-point';
+  marker.style.left = e.offsetX + 'px'; marker.style.top = e.offsetY + 'px'; bg.parentElement.append(marker);
+  submit.classList.remove('disable');
+};
+submit.onclick = () => { if (!submit.classList.contains('disable')) submitted = true; };
+</script>

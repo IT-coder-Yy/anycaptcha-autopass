@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+body { margin: 0; }
+#vc_captcha_box { width: 330px; padding: 12px; transform-origin: top left; }
+.img-container { width: 290px; height: 290px; display: flex; flex-wrap: wrap; gap: 10px; }
+.canvas-container, canvas { width: 90px; height: 90px; }
+.canvas-container.selected { opacity: .5; }
+.drag-area { width: 290px; height: 50px; margin-top: 12px; background: #eee; }
+.vc-captcha-verify-pb { width: 80px; height: 35px; margin-top: 12px; background: blue; color: white; }
+</style>
+<div id="vc_captcha_box">
+  <div class="captcha-prompt-bar"><div class="tit">选择森林植被</div></div>
+  <div class="vc-captcha-verify-img-prompt">
+    <div class="img-container"></div>
+    <div class="drag-area">拖拽到这里</div>
+  </div>
+  <div class="vc-captcha-verify-pb disable">提交</div>
+</div>
+<script>
+// 本地交互夹具：沿用已观察到的 DOM 结构，只依据真实鼠标落点记录选择。
+window.drags = []; window.submitted = false; window.pressed = false;
+const grid = document.querySelector('.img-container');
+const drop = document.querySelector('.drag-area');
+const submit = document.querySelector('.vc-captcha-verify-pb');
+let active = null;
+for (let index = 1; index <= 9; index++) {
+  const tile = document.createElement('div');
+  tile.className = 'canvas-container'; tile.dataset.index = index;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 90;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = `hsl(${index * 35} 60% 60%)`; ctx.fillRect(0, 0, 90, 90);
+  ctx.fillStyle = 'black'; ctx.font = '22px sans-serif'; ctx.fillText(index, 35, 50);
+  canvas.onmousedown = e => {
+    e.preventDefault(); active = tile; window.pressed = true;
+    window.lastStart = [e.clientX, e.clientY];
+  };
+  tile.append(canvas); grid.append(tile);
+}
+document.addEventListener('mouseup', e => {
+  window.pressed = false;
+  if (!active) return;
+  const r = drop.getBoundingClientRect();
+  if (e.clientX > r.left && e.clientX < r.right && e.clientY > r.top && e.clientY < r.bottom) {
+    window.drags.push({index: Number(active.dataset.index), start: window.lastStart,
+                       end: [e.clientX, e.clientY], trusted: e.isTrusted});
+    if (!window.rejectDrag) {
+      active.classList.add('selected'); submit.classList.remove('disable');
+    }
+    if (window.replaceImageAfterDrag) grid.querySelector('canvas').getContext('2d').fillRect(0, 0, 10, 10);
+  }
+  active = null;
+});
+submit.onclick = () => { if (!submit.classList.contains('disable')) window.submitted = true; };
+</script>
