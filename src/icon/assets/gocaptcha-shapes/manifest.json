@@ -1,0 +1,72 @@
+{
+  "repository": "wenlng/go-captcha-assets",
+  "revision": "4da532768f57f0116cd6161d8f1bca93584dedd1",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "name": "shape-1.png",
+      "sha256": "8e6dd922030f973e39094e39d75e34b319eb54be2ad5cad67b9928bd4ca9e4f1",
+      "source_blob": "fe2a35dd0f8c752e3512e76347d6759dd8c00204"
+    },
+    {
+      "name": "shape-2.png",
+      "sha256": "4953a7e04b80076982dbf823260c7475e66fba12cc1fea288bb8a6d61888c5cb",
+      "source_blob": "c715185c5bd40816603f963c19c87b1709ae47ca"
+    },
+    {
+      "name": "shape-3.png",
+      "sha256": "dd73cd1f72b23b913bd18b6c27a35e58ca91a20e2b81235f603e659139710e74",
+      "source_blob": "ce05b4b22781966857b9693c07dd8c9bffb19cb6"
+    },
+    {
+      "name": "shape-4.png",
+      "sha256": "adb86d151c0e6589fb116e13185d857cd8376319313a92d2ca94ff49718b55e2",
+      "source_blob": "c39203a92d7641919fb34b648b1ab2ef8b1fc433"
+    },
+    {
+      "name": "shape-5.png",
+      "sha256": "a5bb7a455e4c387c0993414f8da6b2480bfb921dc4db2ba1d273b463c4df284f",
+      "source_blob": "ab2b6f8887a12bc09824bb4ae343d42ac967b582"
+    },
+    {
+      "name": "shape-6.png",
+      "sha256": "83dcc69a98ed98e2acb250c34f4969a6a9c7e4f5d6140834fe8c72ccbfc2eed9",
+      "source_blob": "60ff6e6d86df628900b7a4fba5548804d5ba8b7e"
+    },
+    {
+      "name": "shape-7.png",
+      "sha256": "8d42d48e797ea942762a681e6a8343b905caf91f9fe118abcdf0de765be31183",
+      "source_blob": "b23bbb0cdb9004ebd62b8d7c9f6923a7e0a4711a"
+    },
+    {
+      "name": "shape-8.png",
+      "sha256": "35b86a882c427de0ee78b86d5f2d0f815036ca981741e6a398553d2f6fa55088",
+      "source_blob": "8e97f0d1571174f89b84a225c4c6d1017cc7f3f7"
+    },
+    {
+      "name": "shape-9.png",
+      "sha256": "099ee93a666eec54b2de5c810050013124687aa2d267f586a6e5f8eeebce2a94",
+      "source_blob": "144e71a7e6941194236602124254ab37abb29c69"
+    },
+    {
+      "name": "shape-10.png",
+      "sha256": "f3c0a51d43cc3ea74d65f5788388e9000969cd5e8167ba315e5fe9a1005fb969",
+      "source_blob": "3f92344590b067111f843528615f12af36bbf0a8"
+    },
+    {
+      "name": "shape-11.png",
+      "sha256": "a6778516977ade8a7ef63beb241917e39d254a1ed0fd95a41bb76f153fafe58a",
+      "source_blob": "72270468dad218e6d5f4cd7ed2ec7c8a81ecd56b"
+    },
+    {
+      "name": "shape-12.png",
+      "sha256": "f9b92c21065439b056fa05f3c94c5d5cd7d457d96f5d95f3985b3e1f82269f6c",
+      "source_blob": "4f5886bebef9f26957afadb97b3fb7e0f5485067"
+    },
+    {
+      "name": "shape-13.png",
+      "sha256": "baef98b19b0bbd34bcb6fd7c97ec984f6775ef375c26f45e5c2489bfcb960641",
+      "source_blob": "aa015473397fe7cc0e814aedbef39da55a648dfa"
+    }
+  ]
+}
