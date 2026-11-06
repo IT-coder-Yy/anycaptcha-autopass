@@ -1,0 +1,15 @@
+.venv/
+.python/
+.cache/
+.browsers/
+runtime/
+models/*.onnx
+__pycache__/
+*.egg-info/
+.env
+
+# Local experiments and documents excluded from the public repository
+/work/
+/docs/DOUYIN-INTEGRATION.md
+/NOTICE.md
+/CONTEXT.md
