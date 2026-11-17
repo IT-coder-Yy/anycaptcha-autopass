@@ -16,11 +16,15 @@ from drag2d.lab import generate as generate_drag2d
 from icon.lab import generate as generate_icon
 from rotate_single.lab import generate as generate_rotation
 from common.language_lab import generate_language
+from normal.lab import generate as generate_normal
+from arithmetic.lab import generate as generate_arithmetic
+from lab.printed import INPUT_KINDS, answer_matches
 
 GENERATORS = {
     'restore': generate_restore, 'drag2d': generate_drag2d, 'icon': generate_icon,
     'rotate-single': generate_rotation,
     'font': partial(generate_language, 'font'), 'order': partial(generate_language, 'order'),
+    'normal': generate_normal, 'arithmetic': generate_arithmetic,
 }
 KINDS = tuple(GENERATORS)
 
@@ -50,7 +54,9 @@ class ChallengeStore:
         if record and record[0]>time.monotonic():
             _,kind,answer=record
             try:
-                if kind=='rotate-single':
+                if kind in INPUT_KINDS:
+                    accepted = answer_matches(submitted['text'], answer['text'], answer['ignore_case'])
+                elif kind=='rotate-single':
                     value=float(submitted['angle'])
                     accepted=math.isfinite(value) and abs((value-answer['angle']+180)%360-180)<=8
                 elif kind=='restore':
