@@ -4,6 +4,7 @@
 .browsers/
 runtime/
 models/*.onnx
+models/*.traineddata
 __pycache__/
 *.egg-info/
 .env
