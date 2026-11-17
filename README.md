@@ -27,12 +27,14 @@ Concept animation showing the automation flow across sliders, rotation, icon cli
 
 **Operate the page. Check the result.** Playwright performs clicks, drags, and rotations. The current challenge's server receipt and page state determine the outcome, with bounded retries and recorded results.
 
-Universal CAPTCHA automation is the project's ongoing goal. The following 11 challenge types are implemented today. Browser automation requires a matching site adapter, and success rates vary by challenge and site.
+Universal CAPTCHA automation is the project's ongoing goal. The following 13 challenge types are implemented today. Browser automation requires a matching site adapter, and success rates vary by challenge and site.
 
 | Challenge | Recognition |
 | --- | --- |
 | Slider | Locate a gap and calculate horizontal movement |
 | Ordered text clicks | Detect characters, match prompts, and order clicks |
+| Alphanumeric input | Read labelled local images and grade letter case according to the displayed instruction |
+| Arithmetic input | Read printed local expressions and calculate integer answers |
 | Single-image rotation | Predict image orientation and rotation angle |
 | Dual-disc rotation | Calculate the relative angle between inner and outer discs |
 | Overlap rotation | Align an original image with its center crop |
@@ -60,6 +62,8 @@ bash setup.sh
 Setup installs dependencies, Chromium, and models, then verifies model files. Initial setup requires network access. If Chromium reports missing system libraries, run `.venv/bin/python -m playwright install-deps chromium`; this may require administrator privileges.
 
 Local font and word-order challenges require Noto Sans/Serif CJK fonts. The default font directory is `/usr/share/fonts/noto-cjk`, containing the corresponding `.ttc` font weights.
+
+`./run.sh recognize --kind normal` uses PP-OCRv5 mobile for samples explicitly marked case-sensitive. Other samples use default ddddocr and case-insensitive grading. `./run.sh recognize --kind arithmetic` uses the same PP-OCRv5 model and accepts either `?` or `？` after a trailing equals sign. Both commands evaluate the whole set or a single labeled image from the local bank. Run `./run.sh serve-lab --kind normal` to check the displayed instructions and grading in the local form.
 
 Semantic grid selection needs a vision model. Copy the template and fill in only the **endpoint, model name, and API key**:
 
