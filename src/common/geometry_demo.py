@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import random
 import time
 from urllib.parse import parse_qs, urlsplit
 import uuid
@@ -22,6 +23,8 @@ from drag2d.solver import drag_piece
 from icon.solver import click_icons
 from icon.templates import click_gocaptcha_icons, template_info
 from common.interaction import Interaction, can_retry
+from common.vision import Prediction
+from lab.printed import INPUT_KINDS, samples
 from lab.server import local_server
 
 
@@ -258,9 +261,40 @@ class Adapter:
         return ''
 
 
+class InputFixtureControl(Adapter):
+    """按出题种子重放固定标注，检查本机表单和回执。"""
+
+    def __init__(self, page, kind, url, seed, scale):
+        super().__init__(page, 'lab', kind, url, scale)
+        self.draw = random.Random(seed)
+
+    async def read(self, folder):
+        case = self.draw.choice(samples(self.kind))
+        challenge = dict(self.receipts.challenge)
+        _, data = decode(challenge['background'])
+        if data != case.image.read_bytes():
+            raise ValueError('页面题图与本轮预定样本不同')
+        (folder / 'background.png').write_bytes(data)
+        control = Prediction(self.kind, True, reason='固定标注表单对照',
+                             detail={'source': 'fixture_label', 'image': case.image.name})
+        return challenge, case, control
+
+    async def act(self, challenge, case, _prediction, interaction, wrong=False):
+        if not await self.current(challenge):
+            raise RuntimeError('填写前题面已变化')
+        text = case.answer
+        if wrong:
+            text = '1' if text == '0' else '0'
+        await self.widget.get_by_label('答案', exact=True).fill(text)
+        if not await self.current(challenge):
+            raise RuntimeError('提交前题面已变化')
+        await self.widget.get_by_role('button', name='提交', exact=True).click()
+        interaction.actions.append({'action': 'submit_fixture', 'text': text})
+
+
 async def run_geometry(root,site,kind,cases=3,max_attempts=1,seconds=120,headless=False,
                        negative=False,recovery_control=False,seed=0,scale=1,retry_low_confidence=False):
-    if kind not in ('restore','drag2d','icon','rotate-single','font','order') or site not in ('lab','gocaptcha','kg'):
+    if kind not in ('restore','drag2d','icon','rotate-single','font','order',*INPUT_KINDS) or site not in ('lab','gocaptcha','kg'):
         raise ValueError('未知新题型或演示站')
     if site=='kg' and kind not in ('font','order'):raise ValueError('本适配仅支持凯格字体与语序')
     if site=='gocaptcha' and kind not in ('drag2d','icon'):raise ValueError('GoCaptcha 不提供横带滑动还原；使用 --site lab')
@@ -281,6 +315,8 @@ async def run_geometry(root,site,kind,cases=3,max_attempts=1,seconds=120,headles
             if site=='kg':
                 from common.language_demo import KGAdapter
                 adapter=KGAdapter(page,kind,root)
+            elif kind in INPUT_KINDS:
+                adapter=InputFixtureControl(page,kind,url,seed,scale)
             else:adapter=Adapter(page,site,kind,url,scale)
             book=adapter.receipts
             record_run_config(folder,root,site,kind,max_attempts,seconds,headless,interaction.config)
@@ -350,8 +386,11 @@ async def run_geometry(root,site,kind,cases=3,max_attempts=1,seconds=120,headles
             finally:
                 if book.pending:await asyncio.gather(*book.pending,return_exceptions=True)
                 await browser.close()
+    scope = 'control' if negative or recovery_control else 'normal'
+    if kind in INPUT_KINDS:
+        scope = 'fixture_control'
     summary=dict(summarize_reports(reports),site=site,kind=kind,directory=str(folder),recovery_control=recovery_control,
-                 metric_scope='control' if negative or recovery_control else 'normal',
+                 metric_scope=scope,
                  max_attempts=max_attempts,max_retries=max_attempts-1,retry_low_confidence=retry_low_confidence)
     write_json(folder/'summary.json',summary)
     return summary
