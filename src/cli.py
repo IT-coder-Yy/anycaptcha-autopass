@@ -3,6 +3,9 @@ import asyncio
 import json
 import os
 from pathlib import Path
+from lab.printed import INPUT_KINDS
+
+LAB_KINDS = ('restore', 'drag2d', 'icon', 'rotate-single', 'font', 'order', *INPUT_KINDS)
 
 
 def main():
@@ -10,12 +13,13 @@ def main():
     commands=parser.add_subparsers(dest="command",required=True)
     demo=commands.add_parser("demo",help="对官方演示站进行有限次数验证")
     demo.add_argument("--site",choices=["kg","yidun","gocaptcha","lab"],required=True)
-    demo.add_argument("--kind",choices=["text","slider","rotate","rotate-single","font","order","restore","drag2d","icon"],required=True)
+    demo.add_argument("--kind",choices=["text","slider","rotate",*LAB_KINDS],required=True,
+                      help="normal/arithmetic 在 lab 使用已知标注验证输入表单")
     demo.add_argument("--cases",type=int,default=3)
     attempts=demo.add_mutually_exclusive_group()
     attempts.add_argument("--attempts",type=int,default=None,
                       help="点字默认最多 3 道，首题未解出或答错后有限换题；设为 1 仅测首题。其他题型默认 1")
-    attempts.add_argument('--retries',type=int,help='几何题型首题之外的重试次数，0–3；3 表示总计最多 4 道')
+    attempts.add_argument('--retries',type=int,help='首题之外的重试次数，0–3，3 表示总计最多 4 道')
     demo.add_argument('--retry-low-confidence',action='store_true',help='几何题型明确允许低置信度未提交后换题；仍计入分母')
     demo.add_argument("--seconds",type=float,default=float(os.environ.get("CAPTCHA_TIMEOUT","120")))
     demo.add_argument("--headless",action="store_true")
@@ -26,29 +30,32 @@ def main():
     demo.add_argument("--mode",choices=['trigger','embedded','popup'],default='trigger',
                       help="易盾滑块展示方式：触发式、嵌入式、弹出式")
     recognize=commands.add_parser("recognize",help="离线识别，不打开浏览器")
-    recognize.add_argument("--kind",choices=["text","slider","rotate-single","font","order","rotate-dual","restore","drag2d","icon"],required=True)
-    recognize.add_argument("image",type=Path)
+    recognize.add_argument("--kind",choices=["text","slider","rotate-dual",*LAB_KINDS],required=True)
+    recognize.add_argument("image",type=Path,nargs="?",help="输入图片。normal/arithmetic 可选一张内置标注图，省略时评测整组。normal 明示区分大小写及 arithmetic 使用 PP-OCRv5 mobile，其余 normal 使用默认 ddddocr")
     recognize.add_argument("--piece",type=Path,help="碎片图；icon 模式传入提示图")
     recognize.add_argument('--icon-profile',choices=['generic','gocaptcha','yidun'],default='generic',help='图标配置：通用、GoCaptcha 静态模板、易盾提示轮廓')
     recognize.add_argument("--band",type=int,nargs=4,metavar=('X','Y','W','H'),help="restore 的可见移动横带区域")
     lab=commands.add_parser('serve-lab',help='启动仅监听本机的自建验证码题库')
     lab.add_argument('--port',type=int,default=8765)
     lab.add_argument('--seed',type=int,default=0)
+    lab.add_argument('--kind',choices=LAB_KINDS,default='restore',help='启动时显示的本地题型入口')
     args=parser.parse_args()
     root=Path(os.environ.get("CAPTCHA_PROJECT_ROOT",Path(__file__).resolve().parents[1]))
     os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH",str(root/".browsers"))
     if args.command=='serve-lab':
         from lab.server import make_server
         server=make_server(args.seed,args.port)
-        print(f'本地题库：http://127.0.0.1:{server.server_port}/?kind=restore',flush=True)
+        print(f'本地题库：http://127.0.0.1:{server.server_port}/?kind={args.kind}',flush=True)
         try:server.serve_forever()
         except KeyboardInterrupt:pass
         finally:server.server_close()
         return
     if args.command=="demo":
         if args.retries is not None or args.retry_low_confidence:
-            if args.kind not in ('restore','drag2d','icon','rotate-single','font','order'):
-                parser.error('--retries 和 --retry-low-confidence 目前只用于 restore、drag2d、icon、rotate-single、font、order')
+            if args.kind not in LAB_KINDS:
+                parser.error('--retries 和 --retry-low-confidence 支持的题型为 '+', '.join(LAB_KINDS))
+            if args.retry_low_confidence and args.kind in INPUT_KINDS:
+                parser.error('固定标注的表单对照没有置信度，可用 --recovery-control 检查换题恢复')
         if args.retries is not None:
             if not 0<=args.retries<=3:parser.error('--retries 必须在 0–3 之间')
             args.attempts=args.retries+1
@@ -62,7 +69,7 @@ def main():
             from icon.demo import run_yidun_icons
             result=asyncio.run(run_yidun_icons(root,args.cases,args.attempts,args.seconds,args.headless,
                                              args.negative_control,args.recovery_control,args.retry_low_confidence))
-        elif args.kind in ('restore','drag2d','icon','rotate-single','font','order'):
+        elif args.kind in LAB_KINDS:
             if not (args.site=='lab' or args.site=='gocaptcha' and args.kind in ('drag2d','icon') or args.site=='kg' and args.kind in ('font','order')):
                 parser.error('新题型支持 lab；GoCaptcha 支持 drag2d/icon；凯格支持 font/order')
             if not .6<=args.scale<=1.4:parser.error('--scale 必须在 0.6–1.4 之间')
@@ -71,7 +78,7 @@ def main():
                                            args.headless,args.negative_control,args.recovery_control,args.seed,args.scale,
                                            args.retry_low_confidence))
         elif args.recovery_control or args.site=='lab':
-            parser.error('本地题库与 --recovery-control 目前只用于 restore、drag2d、icon、rotate-single、font、order')
+            parser.error('本地题库与 --recovery-control 支持的题型为 '+', '.join(LAB_KINDS))
         elif args.site=="gocaptcha" and args.kind=="rotate":
             from rotate_overlap.demo import run_rotation
             result=asyncio.run(run_rotation(root,args.cases,args.attempts,args.seconds,args.headless,args.negative_control))
@@ -79,7 +86,14 @@ def main():
             if args.site=="gocaptcha" or args.kind=="rotate": parser.error("旋转演示目前使用 --site gocaptcha --kind rotate")
             from common.demo import run_demo
             result=asyncio.run(run_demo(root,args.site,args.kind,args.cases,args.attempts,args.seconds,args.headless,args.negative_control,mode=args.mode))
+    elif args.kind in INPUT_KINDS:
+        from common.ocr import evaluate_samples
+        try:
+            result = evaluate_samples(args.kind, args.image)
+        except (LookupError, FileNotFoundError) as exc:
+            parser.error(str(exc))
     else:
+        if args.image is None: parser.error('该识别题型需要输入图片')
         import cv2
         from common.vision import Vision
         vision=Vision(root/"models")
