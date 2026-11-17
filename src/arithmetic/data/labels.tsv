@@ -1,0 +1,29 @@
+image	text	answer	font	size
+arithmetic-01.png	7+5	12	DejaVuSans.ttf	32
+arithmetic-02.png	2-7	-5	DejaVuSerif.ttf	28
+arithmetic-03.png	6*4	24	DejaVuSansMono.ttf	36
+arithmetic-04.png	12÷3	4	DejaVuSans.ttf	32
+arithmetic-05.png	8/2	4	DejaVuSerif.ttf	28
+arithmetic-06.png	3x7	21	DejaVuSansMono.ttf	36
+arithmetic-07.png	4×6	24	DejaVuSans.ttf	32
+arithmetic-08.png	7 + 5 = ?	12	DejaVuSerif.ttf	28
+arithmetic-09.png	12-12=	0	DejaVuSansMono.ttf	36
+arithmetic-10.png	15+27	42	DejaVuSans.ttf	32
+arithmetic-11.png	9X3	27	DejaVuSerif.ttf	28
+arithmetic-12.png	0+8	8	DejaVuSansMono.ttf	36
+arithmetic-13.png	6+8	14	LiberationSans-Regular.ttf	29
+arithmetic-14.png	13-8	5	LiberationSerif-Regular.ttf	33
+arithmetic-15.png	5×7	35	LiberationMono-Regular.ttf	31
+arithmetic-16.png	16/4	4	LiberationSans-Regular.ttf	29
+arithmetic-17.png	14+19=	33	LiberationMono-Regular.ttf	31
+arithmetic-18.png	3-11=	-8	LiberationSans-Regular.ttf	29
+arithmetic-19.png	8*6=	48	LiberationSerif-Regular.ttf	33
+arithmetic-20.png	21÷7=	3	LiberationMono-Regular.ttf	31
+arithmetic-21.png	19 + 6 = ?	25	LiberationSerif-Regular.ttf	33
+arithmetic-22.png	14 - 14 = ?	0	LiberationMono-Regular.ttf	31
+arithmetic-23.png	4 x 9 = ?	36	LiberationSans-Regular.ttf	29
+arithmetic-24.png	36 / 6 = ?	6	LiberationSerif-Regular.ttf	33
+arithmetic-25.png	0+17	17	LiberationSans-Regular.ttf	29
+arithmetic-26.png	20-6	14	LiberationSerif-Regular.ttf	33
+arithmetic-27.png	11X2	22	LiberationMono-Regular.ttf	31
+arithmetic-28.png	28÷4	7	LiberationSans-Regular.ttf	29
