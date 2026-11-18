@@ -147,3 +147,4 @@ The [model manifest](models/manifest.json) pins download URLs and SHA-256 hashes
 | 13 icon templates | wenlng/go-captcha-assets; [asset notice](src/icon/assets/gocaptcha-shapes/NOTICE) and [Apache-2.0 license](src/icon/assets/gocaptcha-shapes/LICENSE) |
 | Idiom and verse vocabulary | chinese-xinhua and chinese-poetry; [data notes and licenses](src/order/data/README.md) |
 | Single-image rotation lab photos | Public scikit-image data; [sources and hashes](src/rotate_single/data/manifest.json) |
+| Photo VQA | Questions and annotations from the VQA Team's VQA v2 validation set, selected and grouped into sets of four with Chinese descriptions. [Original data](https://visualqa.org/download.html) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

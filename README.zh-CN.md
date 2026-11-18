@@ -144,3 +144,4 @@ src/
 | 13 张图标模板 | wenlng/go-captcha-assets；[素材版权说明](src/icon/assets/gocaptcha-shapes/NOTICE)、[Apache-2.0 许可](src/icon/assets/gocaptcha-shapes/LICENSE) |
 | 成语与诗句词库 | chinese-xinhua、chinese-poetry；[数据说明与许可](src/order/data/README.md) |
 | 单图旋转题库照片 | scikit-image 公开数据；[来源及哈希](src/rotate_single/data/manifest.json) |
+| 静态照片问答 | VQA Team 的 VQA v2 验证集问题与标注，选取后按四张分组并添加中文题意。[原始数据](https://visualqa.org/download.html) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |

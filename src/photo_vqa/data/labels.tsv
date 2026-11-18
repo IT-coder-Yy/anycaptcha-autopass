@@ -1,0 +1,65 @@
+case	title	question	option	image	sha256	label
+object-01	有自行车	Is there a bicycle in this picture?	A	000000056205.jpg	815f82015378c3fe02d0a37a5dc1d58edddc058c544a126cb93b1de854d66672	yes
+object-01	有自行车	Is there a bicycle in this picture?	B	000000526342.jpg	6ca4742e6d235fa9eccdf0dffe03ec54d2aa128abe48037862ce5a7af6a07005	no
+object-01	有自行车	Is there a bicycle in this picture?	C	000000487217.jpg	efd4d0cd698f3899f058246f08f65f6da0a7e562680cb928f3f88e0eac3b2861	no
+object-01	有自行车	Is there a bicycle in this picture?	D	000000397522.jpg	f5829decf7026d8e78c6e59d23778048f74eac651c2978f0bf4bdda1677e25a8	no
+object-02	有狗	Is there a dog?	A	000000304180.jpg	655b8f4c204a7820d26b2a53d454a572e8e2c65a46cd1fe71132a0c2794b83c0	no
+object-02	有狗	Is there a dog?	B	000000417520.jpg	beae8d6746f17892cb5af99b4f993bd356eeea1e07280172ec3451b599ef185b	yes
+object-02	有狗	Is there a dog?	C	000000447208.jpg	9d1688f640ab40b6779755d2cb4453289bfb46286c6ce2bc6f3bbb21a1cc3cba	no
+object-02	有狗	Is there a dog?	D	000000109532.jpg	c051332274b4c6e832602f724eaf57b3430cb1a8f98f211223dbc9c691401711	yes
+object-03	有火车	Is there a train?	A	000000143458.jpg	5eacad1746fa56aff94b21111d6d90ff7d843879f42d79a2e47e1a08955e574f	no
+object-03	有火车	Is there a train?	B	000000495146.jpg	cc4814681163a70e29c6aa2bb463b4d6a3c52a3c23f77b38357498c5ffee2d38	yes
+object-03	有火车	Is there a train?	C	000000329900.jpg	9d40de50357cc30a1103c73e94eead46547cab0bfa5bd1abb77cdbe341551c23	no
+object-03	有火车	Is there a train?	D	000000258311.jpg	8dc14565fe038a559652f66019d468f28813899ec086cd23821cf9a394fe29e2	yes
+object-04	有雨伞	Is there an umbrella?	A	000000401197.jpg	dab4adcf70dc28f588a3a22ebd3a3a10e6a6b6e4cf3f492eb5dead41594f7a32	no
+object-04	有雨伞	Is there an umbrella?	B	000000543402.jpg	ac9cf92b89f3d4ad33ad327e30d31e4a4b92de631fefff193f357e259b56ae69	yes
+object-04	有雨伞	Is there an umbrella?	C	000000415828.jpg	7cde05828832eed0937f38a08b5ee864e45a493cf89498db8ff9cc7a68840aa6	yes
+object-04	有雨伞	Is there an umbrella?	D	000000209539.jpg	90110b20f8068a25d3e802954142ce813b05351d3d9056ff0b4231fef362d9fd	yes
+object-05	有钟	Is there a clock?	A	000000497158.jpg	1eedbc2668c29255ef1c4ccd28831a4fe6049f37117b6a21560b0cfa97a9bc85	no
+object-05	有钟	Is there a clock?	B	000000408930.jpg	852ec71ff205c83b1d0f43f710d94d81899ce085a0e15333cd317ef4b1270ba7	yes
+object-05	有钟	Is there a clock?	C	000000470780.jpg	bbe8fbaff9cef9e9fa4d41905b829b8d489151ee55ab2f482e4325fc7688ab70	no
+object-05	有钟	Is there a clock?	D	000000213593.jpg	9231977478728a738fd7b4f060b352d4c996083d3cccfb9daba85e7193ac60fe	no
+object-06	有镜子	Is there a mirror?	A	000000036414.jpg	0817ec01a457dda536894fe5b56da6cef288f2979c88b97f6a5381d965daebe3	yes
+object-06	有镜子	Is there a mirror?	B	000000329030.jpg	0305af4e7d646e3218bfb8f7926f7cc50ae04e40210aad0121103cc536cd6bb0	no
+object-06	有镜子	Is there a mirror?	C	000000051741.jpg	12b41898698f662a5b99fb85a64483dd65923bbbc63e95cfc3c12b09150228c7	no
+object-06	有镜子	Is there a mirror?	D	000000064155.jpg	f184a2f1ceea7eb880d7d343393ada945af03c105f5ec497590032f03af29390	yes
+object-07	有长椅	Is there a bench?	A	000000549965.jpg	76d09fe8230576b02114f2e28ccbbb870b05ce0c71c19306cca71bb0807edfb3	yes
+object-07	有长椅	Is there a bench?	B	000000079905.jpg	181ed19729dc64ff956415761996ce323ac03f38b31ba83433c7c089500b6fbd	no
+object-07	有长椅	Is there a bench?	C	000000248353.jpg	914bcad60b15e83ceacb5458dbccb7828a63ea5c2397592d1995b420c7ec4c54	no
+object-07	有长椅	Is there a bench?	D	000000219144.jpg	2565eba6b863fc246c9e9aae70f17b3ada4c2b0c4a19df7529838694c524dd84	yes
+object-08	有停车让行标志	Is there a stop sign?	A	000000145061.jpg	46b007a447ea0b56bbc09fc0a5edadef7b8dd5b5de92e15bd9ec0d66a13a808a	no
+object-08	有停车让行标志	Is there a stop sign?	B	000000549943.jpg	8a400bd3e34217a3cac8fa319283ab6e20b7e244d4e145cdd41e3d9fad19aa64	yes
+object-08	有停车让行标志	Is there a stop sign?	C	000000418152.jpg	15b985a013cc08ae6cbc71b8267e5b65cd01b1cc60eb968a6b4549b9022d85f6	yes
+object-08	有停车让行标志	Is there a stop sign?	D	000000501023.jpg	1cd7677ee57b0afb24b74c2c75d63025a2ca36907a11653a2ce7139ac4b4b852	yes
+action-01	有人正在骑自行车	Is someone riding the bike?	A	000000139637.jpg	73378362465a45172c0f74bfc58aecf0bcbc019589ed8e58bd84eaa1b85acc1f	yes
+action-01	有人正在骑自行车	Is someone riding the bike?	B	000000274687.jpg	ebc13d2019005f8d7009f72f33e0e861d5e98837ca4c1d56958636d58dd8ba2b	no
+action-01	有人正在骑自行车	Is someone riding the bike?	C	000000006019.jpg	13458fa3ce0bc16c1aad0a846bb67ad7d70a2e0ce5db4502f0220fce517a6863	no
+action-01	有人正在骑自行车	Is someone riding the bike?	D	000000049428.jpg	a25704e9414bffd22ddc47d6aef1f2f5eaaed22727c08995956c5713da25fc01	no
+action-02	有人坐在长椅上	Is anyone sitting on the bench?	A	000000518030.jpg	5f2af624c271d13185b0d19d7f7dcab95439e6ea240c69bb9388d2c0a12d2bb9	no
+action-02	有人坐在长椅上	Is anyone sitting on the bench?	B	000000417043.jpg	c1309536d7b14ba001c9a37127ea1c70d6a74b9d1ba0c453207e897dad43e4c4	no
+action-02	有人坐在长椅上	Is anyone sitting on the bench?	C	000000071988.jpg	cf413f90938e7eb5673fe8f49214f0af7b826ef9f6b0a9bf408901bf5de00d47	yes
+action-02	有人坐在长椅上	Is anyone sitting on the bench?	D	000000313627.jpg	8cbea0a66d7156b261c21e714bee4b8bca83e2463caf8668f1413634e150d6fe	yes
+action-03	男子正在玩电子游戏	Is the man playing a video game?	A	000000444324.jpg	d63ee76354029ff7862d7e05f35abf047ec33bc8e9631a6401ba5d01aef5eb02	no
+action-03	男子正在玩电子游戏	Is the man playing a video game?	B	000000324285.jpg	575df97f0d584c0e6d177d5164a3c8efbaef2f7a2473125d42f9d2a1eff57487	yes
+action-03	男子正在玩电子游戏	Is the man playing a video game?	C	000000553992.jpg	ff92d9daacb484bccf46a40c7ba1230c10f0bf184974e64fbd354914a072d0a9	yes
+action-03	男子正在玩电子游戏	Is the man playing a video game?	D	000000565941.jpg	54e615220bd056020f4c3242ea79a8771bf44bfdcef36499df69f33ffd6f61ec	no
+action-04	他们正在踢足球	Are they playing soccer?	A	000000577373.jpg	f9f3d0ce35d78dc7f5e81531acf01fbf0a32626214dcec942215be43d837b989	no
+action-04	他们正在踢足球	Are they playing soccer?	B	000000113951.jpg	0dc441f8b4f5379e514df6074eba59229397e792049ffd8f53a32ab531e29a60	yes
+action-04	他们正在踢足球	Are they playing soccer?	C	000000453757.jpg	50ac9a0178546d5e2beabdcea51325f8522c448665063adca624c42d30ad71ab	yes
+action-04	他们正在踢足球	Are they playing soccer?	D	000000144243.jpg	0f7b5a8a90f3bc6c7229727a1126e3478618404d1469ecff3b48e41cb8efe086	yes
+action-05	男子站立	Is the man standing?	A	000000376206.jpg	da6dc5bbfa9e31edf7b4f86d4ac27329484ea2e3bfd472e1f13853ebb0c127e7	no
+action-05	男子站立	Is the man standing?	B	000000232842.jpg	624b2d24dbe93ee9b3a688baa6b39a51312a7179971c01f36711017231ac3ea8	yes
+action-05	男子站立	Is the man standing?	C	000000301402.jpg	e175fd3fef5ca5734c97c827c162471e21f9e61bce0c2ac599e9d96aa7285040	no
+action-05	男子站立	Is the man standing?	D	000000176288.jpg	f593bdf1185483c2d3cfc3deaeba3710140542d4b4dd351c64eae68fcc425eb1	no
+action-06	男子坐着	Is the man sitting?	A	000000205035.jpg	bd4dc91f56704f4394464be3ce6cddb1cf4d09449f47a446b7fad3adbc922d71	yes
+action-06	男子坐着	Is the man sitting?	B	000000437494.jpg	5cfd95fa67787658a3b64c841366bc4085ca0e9c59b117fe6e5de35eb239c5f1	no
+action-06	男子坐着	Is the man sitting?	C	000000032760.jpg	54ca3d55ab70f28a20902616e10b107f15adbe770ddbe52af80791f0b6a4c25d	no
+action-06	男子坐着	Is the man sitting?	D	000000489248.jpg	8655b67a5a1f6d88f5c092946c30c8bcf0dfe49cbe59f2c542b916052e395029	yes
+action-07	男子正看向相机	Is the man looking at the camera?	A	000000306247.jpg	2254dd61dc24542e6003f36a81f4148e5d52203faf1181461d752c26c75c742f	no
+action-07	男子正看向相机	Is the man looking at the camera?	B	000000108803.jpg	df69a6369520985ab3d9b39b547a665d449a7234b9df787ea80ded5885b7e3db	yes
+action-07	男子正看向相机	Is the man looking at the camera?	C	000000464857.jpg	aa6a4032a95391bee06675cd9f9cd74cc812b8f76f2af91e42c8bed24e8e3cd1	yes
+action-07	男子正看向相机	Is the man looking at the camera?	D	000000049942.jpg	b7a23aeffdb3415adf1da9693e3bf297888e22a73822610a96c8230135208199	no
+action-08	他正在吃东西	Is he eating?	A	000000438186.jpg	53ceffc425689bcd165620f9b61e2a5859a1a31c9171df66d3be225e8c5ea06e	yes
+action-08	他正在吃东西	Is he eating?	B	000000171762.jpg	0d265886392755ea40bc5bf1c98a7392d0f2cef8bb6caaf96afb91e13b6e1e61	yes
+action-08	他正在吃东西	Is he eating?	C	000000448837.jpg	ac24032624e808c52536a23ff6f3df60c05e3b6ebe74fcef1ae280664c8d52ae	yes
+action-08	他正在吃东西	Is he eating?	D	000000381416.jpg	14d6b4e3523d7c4b111b55f3132abb9e83467d9479f26a4b8e3fcf5e305d3423	no
