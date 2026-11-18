@@ -3,6 +3,7 @@ import asyncio
 import json
 import os
 from pathlib import Path
+from lab.choices import CHOICE_KINDS
 from lab.printed import INPUT_KINDS
 
 LAB_KINDS = ('restore', 'drag2d', 'icon', 'rotate-single', 'font', 'order', *INPUT_KINDS)
@@ -29,16 +30,18 @@ def main():
     demo.add_argument("--scale",type=float,default=1,help="自建题库显示比例，0.6–1.4")
     demo.add_argument("--mode",choices=['trigger','embedded','popup'],default='trigger',
                       help="易盾滑块展示方式：触发式、嵌入式、弹出式")
-    recognize=commands.add_parser("recognize",help="离线识别，不打开浏览器")
-    recognize.add_argument("--kind",choices=["text","slider","rotate-dual",*LAB_KINDS],required=True)
-    recognize.add_argument("image",type=Path,nargs="?",help="输入图片。normal/arithmetic 可选一张内置标注图，省略时评测整组。normal 明示区分大小写及 arithmetic 使用 PP-OCRv5 mobile，其余 normal 使用默认 ddddocr")
+    recognize=commands.add_parser("recognize",help="识别图片或评测本地题库，photo-vqa 调用视觉模型 API")
+    recognize.add_argument("--kind",choices=["text","slider","rotate-dual",*LAB_KINDS,*CHOICE_KINDS],required=True)
+    recognize.add_argument("image",type=Path,nargs="?",metavar="IMAGE_OR_CASE",
+                           help="输入图片。normal/arithmetic 可选一张内置标注图，明示区分大小写的 normal 及 arithmetic 使用 PP-OCRv5 mobile，其余 normal 使用默认 ddddocr。"
+                                "photo-vqa/color-letter 可选一个题号（如 object-01、letter-08）。内置题库省略参数时评测整组。")
     recognize.add_argument("--piece",type=Path,help="碎片图；icon 模式传入提示图")
     recognize.add_argument('--icon-profile',choices=['generic','gocaptcha','yidun'],default='generic',help='图标配置：通用、GoCaptcha 静态模板、易盾提示轮廓')
     recognize.add_argument("--band",type=int,nargs=4,metavar=('X','Y','W','H'),help="restore 的可见移动横带区域")
     lab=commands.add_parser('serve-lab',help='启动仅监听本机的自建验证码题库')
     lab.add_argument('--port',type=int,default=8765)
     lab.add_argument('--seed',type=int,default=0)
-    lab.add_argument('--kind',choices=LAB_KINDS,default='restore',help='启动时显示的本地题型入口')
+    lab.add_argument('--kind',choices=(*LAB_KINDS,*CHOICE_KINDS),default='restore',help='启动时显示的本地题型入口')
     args=parser.parse_args()
     root=Path(os.environ.get("CAPTCHA_PROJECT_ROOT",Path(__file__).resolve().parents[1]))
     os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH",str(root/".browsers"))
@@ -86,6 +89,12 @@ def main():
             if args.site=="gocaptcha" or args.kind=="rotate": parser.error("旋转演示目前使用 --site gocaptcha --kind rotate")
             from common.demo import run_demo
             result=asyncio.run(run_demo(root,args.site,args.kind,args.cases,args.attempts,args.seconds,args.headless,args.negative_control,mode=args.mode))
+    elif args.kind in CHOICE_KINDS:
+        from lab.choices import evaluate
+        try:
+            result = evaluate(args.kind, str(args.image) if args.image else None)
+        except (LookupError, OSError, ValueError) as exc:
+            parser.error(str(exc))
     elif args.kind in INPUT_KINDS:
         from common.ocr import evaluate_samples
         try:
