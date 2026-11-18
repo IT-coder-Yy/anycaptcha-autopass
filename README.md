@@ -81,6 +81,8 @@ cp .env.example .env
 
 Model requests read the project-root `.env` file. Explicit process environment values take precedence. Git ignores this file.
 
+Set `ASR_BASE_URL`, `ASR_MODEL`, and `ASR_API_KEY` in `.env`, then run `./run.sh transcribe-digits /path/to/recording.wav`. This sends the recording to the configured ASR service once. The output includes the transcript in `text` and the digit string in `digits`, preserving leading zeros. If the transcript contains an unrecognized word, `digits` is `null`.
+
 ## Integrate with your application
 
 ### Call a solver directly

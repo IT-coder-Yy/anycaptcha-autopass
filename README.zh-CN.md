@@ -81,6 +81,8 @@ cp .env.example .env
 
 模型调用会自动读取项目根目录的 `.env`，已设置的进程环境变量优先。Git 会忽略此文件。
 
+在 `.env` 配置 `ASR_BASE_URL`、`ASR_MODEL` 和 `ASR_API_KEY` 后，运行 `./run.sh transcribe-digits /path/to/recording.wav`。命令将这段录音发送给配置的 ASR 服务一次，输出原始转写 `text` 和保留前导零的数字串 `digits`。原文含无法识别的词时，`digits` 为 `null`。
+
 ## 接入自己的程序
 
 ### 直接调用题型算法
