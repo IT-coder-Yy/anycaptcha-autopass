@@ -15,7 +15,7 @@ async function fresh(){busy=true;$('status').textContent='加载中';$('status')
  const c=challenge;$('stage').dataset.key=c.key;$('stage').style.width=c.width*scale+'px';$('stage').style.height=c.height*scale+'px';
  $('background').src=c.background;$('background').style.width=c.width*scale+'px';$('background').style.height=c.height*scale+'px';await $('background').decode();
  $('piece').hidden=kind!=='drag2d';$('rail').hidden=!['restore','rotate-single'].includes(kind);$('canvas').hidden=kind!=='restore';$('hint').hidden=kind!=='icon';$('confirm').hidden=!['icon','font','order'].includes(kind);
- $('answer-form').hidden=!['normal','arithmetic'].includes(kind);$('answer-form').reset();
+ $('answer-form').hidden=!['normal','arithmetic','photo-vqa','color-letter'].includes(kind);$('answer-form').reset();
  $('instruction').textContent={'rotate-single':'拖动滑块，使图片方向朝上',restore:'拖动横带，使图像恢复连续',drag2d:'把碎片拖到正确的缺口',icon:'按照提示，从左到右依次点击相同图形'}[kind]||c.instruction;
  if(kind==='restore'){const canvas=$('canvas');canvas.width=c.width;canvas.height=c.height;canvas.style.width=c.width*scale+'px';canvas.style.height=c.height*scale+'px';image.src=c.background;await image.decode();renderBand();$('rail').style.width=c.width*scale+32+'px';$('handle').style.left='0px';}
  if(kind==='rotate-single'){$('background').style.transform='rotate(0deg)';$('rail').style.width=c.width*scale+32+'px';$('handle').style.left='0px';}
@@ -30,10 +30,11 @@ $('stage').addEventListener('click',e=>{if(!['icon','font','order'].includes(kin
 function draggable(el,onmove,onup){let drag=null;el.addEventListener('pointerdown',e=>{if(busy)return;e.preventDefault();drag={x:e.clientX,y:e.clientY,left:parseFloat(el.style.left)||0,top:parseFloat(el.style.top)||0};el.setPointerCapture(e.pointerId);});el.addEventListener('pointermove',e=>{if(drag)onmove(e.clientX-drag.x,e.clientY-drag.y,drag);});el.addEventListener('pointerup',e=>{if(!drag)return;drag=null;el.releasePointerCapture(e.pointerId);onup();});el.addEventListener('pointercancel',()=>drag=null);}
 draggable($('handle'),(dx,dy,start)=>{shift=Math.max(0,Math.min(challenge.width,(start.left+dx)/scale));$('handle').style.left=shift*scale+'px';if(kind==='rotate-single')$('background').style.transform='rotate('+(shift/challenge.width*360)+'deg)';else renderBand();},()=>submit(kind==='rotate-single'?{angle:shift/challenge.width*360}:{shift}));
 draggable($('piece'),(dx,dy,start)=>{let p=$('piece');p.style.left=Math.max(0,Math.min(challenge.width*scale-p.offsetWidth,start.left+dx))+'px';p.style.top=Math.max(0,Math.min(challenge.height*scale-p.offsetHeight,start.top+dy))+'px';},()=>submit({point:[parseFloat($('piece').style.left)/scale,parseFloat($('piece').style.top)/scale]}));
-$('confirm').onclick=()=>submit({points});$('refresh').onclick=()=>fresh();document.querySelectorAll('img').forEach(e=>e.draggable=false);
+function refresh(){fresh().catch(e=>{$('status').textContent='加载失败：'+e.message;});}
+$('confirm').onclick=()=>submit({points});$('refresh').onclick=refresh;document.querySelectorAll('img').forEach(e=>e.draggable=false);
 $('answer-form').onsubmit=event=>{
  event.preventDefault();
  if(!busy && $('status').dataset.key!==challenge.key) submit({text:$('answer').value});
 };
-fresh().catch(e=>{$('status').textContent='加载失败：'+e.message;});
+refresh();
 </script></html>
