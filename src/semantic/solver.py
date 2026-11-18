@@ -26,15 +26,14 @@ class SemanticError(ValueError):
     """可直接展示的脱敏错误；不包含请求、密钥或服务端原始响应。"""
 
 
-def settings_from_env(env_file=None):
-    """只从 .env 读取三项模型配置；进程环境中的显式设置优先。"""
-    if os.getenv("DOUYIN_CAPTCHA_SEMANTIC_ENABLED", "true").strip().lower() != "true":
-        raise SemanticError("语义选图未启用，请配置 DOUYIN_CAPTCHA_SEMANTIC_ENABLED=true")
+def model_connection(env_file=None, *, default_model=""):
+    """读取连接地址、密钥和模型名，进程环境优先。"""
     if env_file is None:
         env_file = Path(os.environ.get("CAPTCHA_PROJECT_ROOT", Path(__file__).resolve().parents[2])) / ".env"
     local = dotenv_values(env_file, interpolate=False)
     result = {key: os.getenv(PREFIX + key.upper(), local.get(PREFIX + key.upper()) or "").strip()
               for key in ("base_url", "api_key", "model")}
+    result["model"] = result["model"] or default_model
     for key in ("base_url", "model"):
         if not result[key]:
             raise SemanticError("请配置 " + PREFIX + key.upper())
@@ -42,6 +41,13 @@ def settings_from_env(env_file=None):
     if (parsed.scheme not in {"http", "https"} or not parsed.hostname
             or parsed.username or parsed.password or parsed.query or parsed.fragment):
         raise SemanticError("DOUYIN_CAPTCHA_LLM_BASE_URL 必须是无鉴权参数的 HTTP(S) 基础地址")
+    return result
+
+
+def settings_from_env(env_file=None):
+    if os.getenv("DOUYIN_CAPTCHA_SEMANTIC_ENABLED", "true").strip().lower() != "true":
+        raise SemanticError("语义选图未启用，请配置 DOUYIN_CAPTCHA_SEMANTIC_ENABLED=true")
+    result = model_connection(env_file)
     for key, default in (("timeout_seconds", "45"), ("min_confidence", "0.8")):
         name = PREFIX + key.upper()
         try:
