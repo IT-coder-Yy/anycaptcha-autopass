@@ -1,7 +1,11 @@
 <!doctype html><html lang="zh"><meta charset="utf-8"><title>本地验证码题库</title>
 <style>
 body{font:16px system-ui;margin:40px;background:#f4f6f8;color:#18252c}main{max-width:620px;background:white;padding:28px;border:1px solid #ccd4d9}h1{font-size:22px}button{padding:9px 18px;cursor:pointer}#stage{position:relative;overflow:hidden;touch-action:none;user-select:none;margin:16px 0}#background,#piece,canvas{position:absolute;left:0;top:0}#piece{cursor:grab}#rail{height:38px;background:#e1e6ea;position:relative;margin:14px 0}#handle{position:absolute;height:38px;width:32px;background:#276c8c;cursor:grab;touch-action:none;color:white;text-align:center}#status{min-height:24px}#hint{display:block;margin:12px 0}.dot{position:absolute;border-radius:100%;background:#c63434;color:white;width:22px;height:22px;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
-</style><main><h1>本地验证码题库</h1><p id="instruction"></p><img id="hint" hidden><div id="stage"><img id="background"><canvas id="canvas" hidden></canvas><img id="piece" hidden></div><div id="rail" hidden><div id="handle">↔</div></div>
+#pair-board{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr}#pair-board:empty{display:none}
+#pair-board button{display:flex;flex-flow:column;align-items:center;justify-content:center;min-width:0;min-height:0;padding:2px;background:white;border:1px solid #ccd4d9}
+#pair-board img{width:100%;height:calc(100% - 1.5em);object-fit:contain;pointer-events:none}
+#pair-board [draggable=true]{cursor:grab}#pair-board [aria-pressed=true],#pair-board button:focus-visible{outline:3px solid #276c8c;outline-offset:-3px}
+</style><main><h1>本地验证码题库</h1><p id="instruction"></p><img id="hint" hidden><div id="stage"><img id="background"><canvas id="canvas" hidden></canvas><img id="piece" hidden><div id="pair-board"></div></div><div id="rail" hidden><div id="handle">↔</div></div>
 <form id="answer-form" hidden><label for="answer">答案</label> <input id="answer" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" required> <button type="submit">提交</button></form>
 <button id="confirm" hidden>确认</button> <button id="refresh">换一题</button><p id="status" role="status"></p></main>
 <script>
@@ -10,11 +14,50 @@ const scale=Math.min(1.4,Math.max(.6,Number(params.get('scale')||1)));
 const $=id=>document.getElementById(id);let challenge,points=[],shift=0,busy=false;
 const image=new Image();image.draggable=false;
 function renderBand(){const c=$('canvas'),ctx=c.getContext('2d'),[x,y,w,h]=challenge.band;ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(image,0,0);ctx.clearRect(x,y,w,h);let dx=((shift%w)+w)%w;ctx.drawImage(image,x,y,w-dx,h,x+dx,y,w-dx,h);if(dx)ctx.drawImage(image,x+w-dx,y,dx,h,x,y,dx,h);}
+function showPairs(c){
+ const grid=$('pair-board'), confirm=$('confirm'), n=c.pieces.length;
+ const assigned=Array(n).fill(null), pieces=[], labels=[];
+ let active=null;
+ const editable=()=>!busy && challenge.key===c.key && $('status').dataset.key!==c.key;
+ const letter=i=>String.fromCharCode(65+i);
+ function update(){
+  pieces.forEach((button,i)=>button.setAttribute('aria-pressed',String(active===i)));
+  labels.forEach((label,j)=>{const i=assigned.indexOf(j);label.textContent=i<0?String(j+1):(j+1)+' ← '+letter(i);});
+  confirm.disabled=assigned.includes(null);
+ }
+ function place(j){
+  if(!editable() || active===null)return;
+  const previous=assigned.indexOf(j);if(previous>=0)assigned[previous]=null;
+  assigned[active]=j;active=null;update();
+ }
+ grid.replaceChildren();grid.style.gridTemplateColumns='repeat('+n+',1fr)';
+ for(const [row,images] of [c.pieces,c.slots].entries()){
+  images.forEach((src,i)=>{
+   const button=document.createElement('button'), img=new Image(), label=document.createElement('span');
+   button.type='button';img.alt='';img.draggable=false;img.src=src;button.append(img,label);grid.append(button);
+   if(row===0){
+    pieces.push(button);label.textContent=letter(i);button.setAttribute('aria-label','拼块 '+letter(i));button.draggable=true;
+    button.onclick=()=>{if(editable()){active=i;update();}};
+    button.ondragstart=e=>{if(!editable()){e.preventDefault();return;}active=i;e.dataTransfer.setData('text/plain',letter(i));update();};
+   }else{
+    labels.push(label);button.setAttribute('aria-label','槽位 '+(i+1));
+    button.onclick=()=>place(i);button.ondragover=e=>e.preventDefault();button.ondrop=e=>{e.preventDefault();place(i);};
+   }
+  });
+ }
+ confirm.onclick=()=>{
+  if(!editable() || assigned.includes(null))return;
+  confirm.disabled=true;
+  submit({text:assigned.map(j=>j+1).join('')});
+ };
+ update();
+}
 async function fresh(){busy=true;$('status').textContent='加载中';$('status').dataset.key='';$('status').dataset.state='';
  challenge=await (await fetch('/challenge?kind='+kind)).json();points=[];shift=0;document.querySelectorAll('.dot').forEach(e=>e.remove());
  const c=challenge;$('stage').dataset.key=c.key;$('stage').style.width=c.width*scale+'px';$('stage').style.height=c.height*scale+'px';
- $('background').src=c.background;$('background').style.width=c.width*scale+'px';$('background').style.height=c.height*scale+'px';await $('background').decode();
- $('piece').hidden=kind!=='drag2d';$('rail').hidden=!['restore','rotate-single'].includes(kind);$('canvas').hidden=kind!=='restore';$('hint').hidden=kind!=='icon';$('confirm').hidden=!['icon','font','order'].includes(kind);
+ $('background').hidden=kind==='shape-pairing';
+ if(kind==='shape-pairing'){showPairs(c);}else{$('background').src=c.background;$('background').style.width=c.width*scale+'px';$('background').style.height=c.height*scale+'px';await $('background').decode();}
+ $('piece').hidden=kind!=='drag2d';$('rail').hidden=!['restore','rotate-single'].includes(kind);$('canvas').hidden=kind!=='restore';$('hint').hidden=kind!=='icon';$('confirm').hidden=!['icon','font','order','shape-pairing'].includes(kind);
  $('answer-form').hidden=!['normal','arithmetic','photo-vqa','color-letter'].includes(kind);$('answer-form').reset();
  $('instruction').textContent={'rotate-single':'拖动滑块，使图片方向朝上',restore:'拖动横带，使图像恢复连续',drag2d:'把碎片拖到正确的缺口',icon:'按照提示，从左到右依次点击相同图形'}[kind]||c.instruction;
  if(kind==='restore'){const canvas=$('canvas');canvas.width=c.width;canvas.height=c.height;canvas.style.width=c.width*scale+'px';canvas.style.height=c.height*scale+'px';image.src=c.background;await image.decode();renderBand();$('rail').style.width=c.width*scale+32+'px';$('handle').style.left='0px';}

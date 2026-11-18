@@ -18,6 +18,7 @@ from rotate_single.lab import generate as generate_rotation
 from common.language_lab import generate_language
 from normal.lab import generate as generate_normal
 from arithmetic.lab import generate as generate_arithmetic
+from shape_pairing.lab import generate as generate_shape_pairing
 from lab import choices
 from lab.printed import INPUT_KINDS, answer_matches
 
@@ -26,6 +27,7 @@ GENERATORS = {
     'rotate-single': generate_rotation,
     'font': partial(generate_language, 'font'), 'order': partial(generate_language, 'order'),
     'normal': generate_normal, 'arithmetic': generate_arithmetic,
+    'shape-pairing': generate_shape_pairing,
     **{kind: partial(choices.generate, kind) for kind in choices.CHOICE_KINDS},
 }
 KINDS = tuple(GENERATORS)
@@ -59,7 +61,7 @@ class ChallengeStore:
                 if kind in choices.CHOICE_KINDS:
                     text = submitted['text']
                     accepted = isinstance(text, str) and ''.join(sorted(text.strip().upper())) == answer['text']
-                elif kind in INPUT_KINDS:
+                elif kind in INPUT_KINDS or kind == 'shape-pairing':
                     accepted = answer_matches(submitted['text'], answer['text'], answer['ignore_case'])
                 elif kind=='rotate-single':
                     value=float(submitted['angle'])
