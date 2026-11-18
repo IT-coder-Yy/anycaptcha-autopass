@@ -65,13 +65,19 @@ bash setup.sh
 
 `./run.sh recognize --kind normal` 只在本地题面明确标注区分大小写时使用 PP-OCRv5 mobile，其余题目使用默认 ddddocr 并忽略字母大小写判分。`./run.sh recognize --kind arithmetic` 使用同一 PP-OCRv5 模型，算式等号后的行末问号支持 `?` 和 `？`。两条命令均可评测整组题图或一张内置标注图。运行 `./run.sh serve-lab --kind normal` 可在本地表单核对题面提示和判分。
 
-语义九宫格需要配置视觉模型。复制模板并填写 **模型地址、模型名、API Key** 三项即可：
+`./run.sh recognize --kind photo-vqa object-01` 默认用 `qwen3.7-plus` 逐张回答四张公开照片的原题，首次使用按 SHA-256 校验并缓存 COCO 原图。`./run.sh recognize --kind color-letter letter-08` 在本地按颜色和原始字高比对印刷字母，区分大小写。省略题号时每种评测 16 题，照片组会发送 64 次模型请求。将 `recognize` 换成 `serve-lab` 并省略题号，可在本地页面手动作答。
+
+彩色字卡和参考字形在首次使用时生成，PNG 缓存在 `.cache/color-letter/`。复现原图需安装静态 TTF 字体 DejaVu 2.37（Sans、Serif）、Liberation 2.1.5（Sans Regular、Mono Regular、Serif Italic）和 Noto Sans Regular 2.015。原图使用 Pillow 13.0.0 和 FreeType 2.14.3 渲染。
+
+输出的 `correct` 按四个选项全部正确计题，`options_correct` 按单个选项是否选对计数，`labels_correct` 按每张照片的 Yes/No 或每张字卡的颜色与字母是否读对计数。
+
+语义九宫格和照片问答共用视觉模型配置。复制模板后填写 **模型地址、模型名、API Key**。
 
 ```sh
 cp .env.example .env
 ```
 
-语义识别时会自动读取项目根目录的 `.env`；普通图像算法无需填写。其余参数已有代码默认值，不需要放进 `.env`。已设置的进程环境变量优先，`.env` 不会提交到仓库。
+模型调用会自动读取项目根目录的 `.env`，已设置的进程环境变量优先。Git 会忽略此文件。
 
 ## 接入自己的程序
 

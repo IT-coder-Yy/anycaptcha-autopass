@@ -65,13 +65,19 @@ Local font and word-order challenges require Noto Sans/Serif CJK fonts. The defa
 
 `./run.sh recognize --kind normal` uses PP-OCRv5 mobile for samples explicitly marked case-sensitive. Other samples use default ddddocr and case-insensitive grading. `./run.sh recognize --kind arithmetic` uses the same PP-OCRv5 model and accepts either `?` or `？` after a trailing equals sign. Both commands evaluate the whole set or a single labeled image from the local bank. Run `./run.sh serve-lab --kind normal` to check the displayed instructions and grading in the local form.
 
-Semantic grid selection needs a vision model. Copy the template and fill in only the **endpoint, model name, and API key**:
+`./run.sh recognize --kind photo-vqa object-01` asks `qwen3.7-plus` the original question for each of four public photos. The first use caches the COCO originals after verifying their SHA-256 hashes. `./run.sh recognize --kind color-letter letter-08` matches printed letters locally using their color and original glyph height, preserving case. Omit the case ID to evaluate all 16 sets. The full photo bank makes 64 model requests. Use `serve-lab` in place of `recognize` without a case ID to try either bank manually.
+
+The color-letter bank renders each card and reference glyph on first use and stores the PNGs in `.cache/color-letter/`. To reproduce the original pixels, install the static TTFs for DejaVu 2.37 (Sans and Serif), Liberation 2.1.5 (Sans Regular, Mono Regular and Serif Italic), and Noto Sans Regular 2.015. The reference run used Pillow 13.0.0 with FreeType 2.14.3.
+
+`correct` counts sets with all four options correct. `options_correct` counts individual selection decisions. `labels_correct` counts exact Yes/No answers or exact color-and-letter readings.
+
+Semantic grid selection and photo VQA share the vision model configuration. Copy the template and fill in the **endpoint, model name, and API key**.
 
 ```sh
 cp .env.example .env
 ```
 
-The project-root `.env` file is read automatically during semantic recognition. Other image solvers need no model service configuration. All other parameters have code defaults and do not belong in `.env`. Explicit process environment values take precedence; `.env` is excluded from Git.
+Model requests read the project-root `.env` file. Explicit process environment values take precedence. Git ignores this file.
 
 ## Integrate with your application
 
