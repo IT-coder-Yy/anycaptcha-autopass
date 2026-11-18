@@ -18,6 +18,7 @@ from rotate_single.lab import generate as generate_rotation
 from common.language_lab import generate_language
 from normal.lab import generate as generate_normal
 from arithmetic.lab import generate as generate_arithmetic
+from lab import choices
 from lab.printed import INPUT_KINDS, answer_matches
 
 GENERATORS = {
@@ -25,6 +26,7 @@ GENERATORS = {
     'rotate-single': generate_rotation,
     'font': partial(generate_language, 'font'), 'order': partial(generate_language, 'order'),
     'normal': generate_normal, 'arithmetic': generate_arithmetic,
+    **{kind: partial(choices.generate, kind) for kind in choices.CHOICE_KINDS},
 }
 KINDS = tuple(GENERATORS)
 
@@ -54,7 +56,10 @@ class ChallengeStore:
         if record and record[0]>time.monotonic():
             _,kind,answer=record
             try:
-                if kind in INPUT_KINDS:
+                if kind in choices.CHOICE_KINDS:
+                    text = submitted['text']
+                    accepted = isinstance(text, str) and ''.join(sorted(text.strip().upper())) == answer['text']
+                elif kind in INPUT_KINDS:
                     accepted = answer_matches(submitted['text'], answer['text'], answer['ignore_case'])
                 elif kind=='rotate-single':
                     value=float(submitted['angle'])
@@ -87,6 +92,15 @@ def make_server(seed=0, port=0):
             parsed=urlsplit(self.path)
             if parsed.path=='/':
                 return self.send(Path(__file__).with_name('lab.html').read_bytes(),'text/html; charset=utf-8')
+            if parsed.path=='/choice-sheet':
+                query = parse_qs(parsed.query)
+                kind, name = query.get('kind', [''])[0], query.get('case', [''])[0]
+                if kind in choices.CHOICE_KINDS and name in choices.bank(kind):
+                    try:
+                        image = choices.sheet(kind, choices.bank(kind)[name])
+                    except (OSError, ValueError):
+                        return self.send({'error':'题库图片暂时无法读取'}, status=503)
+                    return self.send(image, 'image/png')
             if parsed.path=='/challenge':
                 kind=parse_qs(parsed.query).get('kind',['restore'])[0]
                 if kind in KINDS:return self.send(store.issue(kind))
