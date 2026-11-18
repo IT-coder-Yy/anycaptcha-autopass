@@ -1,4 +1,4 @@
-"""静态照片和印刷字卡共用的四选项题库与整题判分。"""
+"""读取固定题库的标签，分别按选项集合或拼块顺序判分。"""
 import csv
 from contextlib import nullcontext
 from functools import cache
@@ -6,6 +6,7 @@ from io import BytesIO
 from pathlib import Path
 
 CHOICE_KINDS = ("photo-vqa", "color-letter")
+FIXED_KINDS = (*CHOICE_KINDS, "shape-pairing")
 SHEET_SIZE = (480, 320)
 
 
@@ -61,6 +62,9 @@ def evaluate(kind, case_id=None):
         if case_id not in cases:
             raise LookupError(f"{kind} 题库中没有题号 {case_id}")
         cases = {case_id: cases[case_id]}
+    if kind == "shape-pairing":
+        from shape_pairing.solver import evaluate as evaluate_pairs
+        return evaluate_pairs(cases)
     if kind == "photo-vqa":
         from photo_vqa.solver import reader
         engine = reader()
