@@ -12,6 +12,8 @@ LAB_KINDS = ('restore', 'drag2d', 'icon', 'rotate-single', 'font', 'order', *INP
 def main():
     parser=argparse.ArgumentParser(description="本地验证码识别与演示站验证")
     commands=parser.add_subparsers(dest="command",required=True)
+    speech=commands.add_parser("transcribe-digits",help="调用 ASR 听写本地数字录音")
+    speech.add_argument("audio",type=Path,metavar="AUDIO",help="本地音频文件，例如 WAV 或 MP3")
     demo=commands.add_parser("demo",help="对官方演示站进行有限次数验证")
     demo.add_argument("--site",choices=["kg","yidun","gocaptcha","lab"],required=True)
     demo.add_argument("--kind",choices=["text","slider","rotate",*LAB_KINDS],required=True,
@@ -53,7 +55,13 @@ def main():
         except KeyboardInterrupt:pass
         finally:server.server_close()
         return
-    if args.command=="demo":
+    if args.command=="transcribe-digits":
+        from audio_digits.asr import transcribe
+        try:
+            result = transcribe(args.audio, root / ".env")
+        except (OSError, ValueError) as exc:
+            parser.error(str(exc))
+    elif args.command=="demo":
         if args.retries is not None or args.retry_low_confidence:
             if args.kind not in LAB_KINDS:
                 parser.error('--retries 和 --retry-low-confidence 支持的题型为 '+', '.join(LAB_KINDS))
