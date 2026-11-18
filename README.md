@@ -71,6 +71,8 @@ The color-letter bank renders each card and reference glyph on first use and sto
 
 `correct` counts sets with all four options correct. `options_correct` counts individual selection decisions. `labels_correct` counts exact Yes/No answers or exact color-and-letter readings.
 
+`./run.sh recognize --kind shape-pairing` evaluates 16 local geometry boards. Add a case ID such as `G14` to evaluate one board. Results list slot numbers in piece order (A–D), with `null` for an ambiguous pairing. Use `./run.sh serve-lab --kind shape-pairing` to drag pieces manually or select a piece and then its slot before submitting.
+
 Semantic grid selection and photo VQA share the vision model configuration. Copy the template and fill in the **endpoint, model name, and API key**.
 
 ```sh

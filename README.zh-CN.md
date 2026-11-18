@@ -71,6 +71,8 @@ bash setup.sh
 
 输出的 `correct` 按四个选项全部正确计题，`options_correct` 按单个选项是否选对计数，`labels_correct` 按每张照片的 Yes/No 或每张字卡的颜色与字母是否读对计数。
 
+`./run.sh recognize --kind shape-pairing` 评测 16 道本地几何拼板，也可加题号（如 `G14`）。结果按 A、B、C、D 顺序列出槽位编号，无法区分的图块显示为 `null`。`./run.sh serve-lab --kind shape-pairing` 可手动拖放或点选图块与槽位，全部配好后提交。
+
 语义九宫格和照片问答共用视觉模型配置。复制模板后填写 **模型地址、模型名、API Key**。
 
 ```sh
