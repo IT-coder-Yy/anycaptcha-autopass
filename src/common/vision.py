@@ -39,8 +39,8 @@ def plain_json(value):
     return value
 
 
-def best_assignment(scores):
-    """提示数很少，精确枚举一对一匹配；同时保留第二名用于歧义检查。"""
+def best_assignment(scores, *, keep_ties=False):
+    """枚举一对一匹配并计算与第二名的差距。开启 keep_ties 时，最优解有分歧的位置返回 None。"""
     a = np.asarray(scores, dtype=float)
     if a.ndim != 2 or not 1 <= a.shape[0] <= 5 or not a.shape[0] <= a.shape[1] <= 8:
         raise ValueError("检测数量不支持：需要 1–5 个提示和不超过 8 个候选")
@@ -50,7 +50,11 @@ def best_assignment(scores):
                      for p in permutations(range(a.shape[1]), a.shape[0])), reverse=True)
     total, indices = ranked[0]
     gap = (total - ranked[1][0]) / a.shape[0] if len(ranked) > 1 else float("inf")
-    return list(indices), float(min(a[i, j] for i, j in enumerate(indices))), gap
+    selected = list(indices)
+    if keep_ties and gap <= 1e-10:
+        tied = [p for score, p in ranked if total - score <= 1e-10 * a.shape[0]]
+        selected = [col[0] if len(set(col)) == 1 else None for col in zip(*tied)]
+    return selected, float(min(a[i, j] for i, j in enumerate(indices))), gap
 
 
 def letterbox(image, width, height, fill=114, interpolation=cv2.INTER_LINEAR):
